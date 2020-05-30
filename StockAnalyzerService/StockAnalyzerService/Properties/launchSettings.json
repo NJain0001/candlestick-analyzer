@@ -1,0 +1,10 @@
+﻿{
+  "profiles": {
+    "StockAnalyzerService": {
+      "commandName": "Project",
+      "environmentVariables": {
+        "DOTNET_ENVIRONMENT": "Development"
+      }
+    }
+  }
+}
