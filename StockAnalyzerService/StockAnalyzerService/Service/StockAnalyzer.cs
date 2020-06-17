@@ -22,7 +22,7 @@ namespace StockAnalyzerService.Service {
 				HttpClient stockAnalyzerClient = clientFactory.CreateClient("stockAnalyzer");
 				return await httpCalls.Get<List<StockMetadata>>(stockAnalyzerClient, urlParameters);
 			} catch {
-				return null;
+				return new List<StockMetadata>();
 			}
 		}
 	}

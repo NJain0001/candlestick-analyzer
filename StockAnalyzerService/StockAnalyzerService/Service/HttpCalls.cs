@@ -2,10 +2,15 @@
 using System.Collections.Generic;
 using System.Net.Http;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
 
 namespace StockAnalyzerService.Service {
     public class HttpCalls: IHttpCalls {
-        public HttpCalls() { }
+
+        private readonly ILogger _logger;
+        public HttpCalls(ILogger<HttpCalls> logger) {
+            _logger = logger;
+        }
 
         public async Task<T> Get<T>(HttpClient httpClient, string urlParameters) {
             try {
@@ -15,8 +20,9 @@ namespace StockAnalyzerService.Service {
                     return await response.Content.ReadAsAsync<T>();
                 }
                 return default;
-            } catch {
-                return default;
+            } catch (Exception ex) {
+                _logger.LogError(ex, "Error when making a http GET call");
+                throw;
             }
 
         }
