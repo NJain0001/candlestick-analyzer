@@ -47,7 +47,7 @@ namespace StockAnalyzerService.Test {
             httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
             // Act
-            var httpCalls = new HttpCalls();
+            var httpCalls = new HttpCalls(null);
             var result = await httpCalls.Get<StockMetadata>(httpClient, "test");
 
             // Assert
@@ -92,7 +92,7 @@ namespace StockAnalyzerService.Test {
             httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
             // Act
-            var httpCalls = new HttpCalls();
+            var httpCalls = new HttpCalls(null);
             var result = await httpCalls.Get<List<StockMetadata>>(httpClient, "test");
 
             // Assert
