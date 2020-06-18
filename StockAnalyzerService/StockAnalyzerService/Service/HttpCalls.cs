@@ -13,15 +13,15 @@ namespace StockAnalyzerService.Service {
         }
 
         public async Task<T> Get<T>(HttpClient httpClient, string urlParameters) {
+            string url = httpClient.BaseAddress + urlParameters;
             try {
-                string url = httpClient.BaseAddress + urlParameters;
                 HttpResponseMessage response = await httpClient.GetAsync(url);
                 if (response.IsSuccessStatusCode) {
                     return await response.Content.ReadAsAsync<T>();
                 }
                 return default;
             } catch (Exception ex) {
-                _logger.LogError(ex, "Error when making a http GET call");
+                _logger.LogError(ex, $"Error when making a http GET call to {url}");
                 throw;
             }
 
