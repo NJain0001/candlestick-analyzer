@@ -18,18 +18,22 @@ namespace StockAnalyzerService {
         }
 
         public static IHostBuilder CreateHostBuilder(string[] args) {
+            var configuration = BuildLoggingConfiguration();
             var host = Host.CreateDefaultBuilder(args);
-            host = ConfigureLogging(host);
+            host = ConfigureLogging(host, configuration);
             host = ConfigureServices(host);
             return host.UseWindowsService();
         }
 
-        public static IHostBuilder ConfigureLogging(IHostBuilder host) {
+        public static IConfiguration BuildLoggingConfiguration() {
+            return new ConfigurationBuilder()
+                .SetBasePath(Directory.GetCurrentDirectory())
+                .AddJsonFile("appsettings.json")
+                .Build();
+        }
+
+        public static IHostBuilder ConfigureLogging(IHostBuilder host, IConfiguration configuration) {
             return host.ConfigureLogging(configureLogging => {
-                var configuration = new ConfigurationBuilder()
-                    .SetBasePath(Directory.GetCurrentDirectory())
-                    .AddJsonFile("appsettings.json")
-                    .Build();
                 Log.Logger = new LoggerConfiguration()
                     .ReadFrom.Configuration(configuration)
                     .CreateLogger();
