@@ -10,6 +10,7 @@ using System.Threading;
 using System.Collections.Generic;
 using StockAnalyzerService.Service;
 using StockAnalyzerService.Model;
+using Microsoft.Extensions.Logging;
 
 namespace StockAnalyzerService.Test {
     public class StockAnalyzerTests {
@@ -34,7 +35,7 @@ namespace StockAnalyzerService.Test {
             var httpClientFactory = new Mock<IHttpClientFactory>();
 
             // Act
-            var stockAnalyzer = new StockAnalyzer(httpClientFactory.Object, httpCallsMock.Object);
+            var stockAnalyzer = new StockAnalyzer(httpClientFactory.Object, httpCallsMock.Object, null);
             var stocks = await stockAnalyzer.GetStocksWithUsers();
 
             // Assert
@@ -50,9 +51,10 @@ namespace StockAnalyzerService.Test {
             httpCallsMock.Setup(m => m.Get<List<StockMetadata>>(It.IsAny<HttpClient>(), It.IsAny<string>())).Throws(new Exception());
 
             var httpClientFactory = new Mock<IHttpClientFactory>();
+            var loggerMock = new Mock<ILogger<StockAnalyzer>>();
 
             // Act
-            var stockAnalyzer = new StockAnalyzer(httpClientFactory.Object, httpCallsMock.Object);
+            var stockAnalyzer = new StockAnalyzer(httpClientFactory.Object, httpCallsMock.Object, loggerMock.Object);
             var stocks = await stockAnalyzer.GetStocksWithUsers();
 
             // Assert
