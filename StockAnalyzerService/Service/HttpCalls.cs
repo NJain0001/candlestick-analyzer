@@ -32,11 +32,18 @@ namespace StockAnalyzerService.Service {
 
         public async Task<IEnumerable<T>> GetFromCsv<T>(HttpClient httpClient, string urlParameters) {
             string url = httpClient.BaseAddress + urlParameters;
-
-            using (var reader = new StreamReader(await httpClient.GetStreamAsync(url)))
+            try
             {
-                var csvr = new CsvReader(reader, CultureInfo.InvariantCulture);
-                return csvr.GetRecords<T>().ToList();
+                using (var reader = new StreamReader(await httpClient.GetStreamAsync(url)))
+                {
+                    var csvr = new CsvReader(reader, CultureInfo.InvariantCulture);
+                    return csvr.GetRecords<T>().ToList();
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, $"Error when making a http GET call to {url}");
+                throw;
             }
         }
     }

@@ -7,6 +7,6 @@ using System.Threading.Tasks;
 namespace StockAnalyzerService.Service {
     public interface IStockAnalyzer {
         Task<List<StockMetadata>> GetStocksWithUsers();
-        Task GetStockCandlestickData(StockMetadata stock);
+        Task<IEnumerable<Candlestick>> GetStockCandlestickData(StockMetadata stock);
     }
 }

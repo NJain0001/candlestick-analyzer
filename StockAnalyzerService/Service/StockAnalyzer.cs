@@ -35,19 +35,28 @@ namespace StockAnalyzerService.Service {
 			}
 		}
 
-		public async Task GetStockCandlestickData(StockMetadata stock)
+		public async Task<IEnumerable<Candlestick>> GetStockCandlestickData(StockMetadata stock)
 		{
-			HttpClient vantageApi = clientFactory.CreateClient("vantageApi");
-			var httpParams = new Dictionary<string, string>() {
-				{ "function", "TIME_SERIES_INTRADAY" },
-				{ "symbol", stock.Ticker},
-				{ "interval", "60min" },
-				{ "apikey", _apiKey},
-				{ "datatype", "csv"}
-			};
-			vantageApi.BaseAddress = new System.Uri(QueryHelpers.AddQueryString(vantageApi.BaseAddress.ToString(), httpParams));
+			try
+			{
+				HttpClient vantageApi = clientFactory.CreateClient("vantageApi");
+				var httpParams = new Dictionary<string, string>() {
+					{ "function", "TIME_SERIES_INTRADAY" },
+					{ "symbol", stock.Ticker},
+					{ "interval", "60min" },
+					{ "apikey", _apiKey},
+					{ "datatype", "csv"}
+				};
+				vantageApi.BaseAddress = new System.Uri(QueryHelpers.AddQueryString(vantageApi.BaseAddress.ToString(), httpParams));
 
-			var data = await httpCalls.GetFromCsv<Candlestick>(vantageApi, null);
+				var candlestickData = await httpCalls.GetFromCsv<Candlestick>(vantageApi, null);
+				return candlestickData;
+			}
+			catch (Exception ex)
+			{
+				_logger.LogError(ex, "An error occurred while retrieving data from vantage");
+				return new List<Candlestick>();
+			}
 		}
 	}
 }
