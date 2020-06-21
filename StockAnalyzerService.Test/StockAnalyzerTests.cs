@@ -11,9 +11,23 @@ using System.Collections.Generic;
 using StockAnalyzerService.Service;
 using StockAnalyzerService.Model;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Configuration;
 
 namespace StockAnalyzerService.Test {
     public class StockAnalyzerTests {
+
+        private Mock<IHttpCalls> httpCallsMock;
+        private Mock<IHttpClientFactory> httpClientFactoryMock;
+        private Mock<ILogger<StockAnalyzer>> loggerMock;
+        private Mock<IConfiguration> configurationMock;
+
+        public StockAnalyzerTests()
+        {
+            httpCallsMock = new Mock<IHttpCalls>(MockBehavior.Strict);
+            httpClientFactoryMock = new Mock<IHttpClientFactory>();
+            loggerMock = new Mock<ILogger<StockAnalyzer>>();
+            configurationMock = new Mock<IConfiguration>();
+        }
         [Fact]
         public async void GetStocksWithUsers_Should_ReturnListOfStockMetadataObjects() {
             // Arrange
@@ -29,13 +43,14 @@ namespace StockAnalyzerService.Test {
             };
 
             List<StockMetadata> expectedValue = new List<StockMetadata> { testStock };
-            var httpCallsMock = new Mock<IHttpCalls>(MockBehavior.Strict);
-            httpCallsMock.Setup(m => m.Get<List<StockMetadata>>(It.IsAny<HttpClient>(), It.IsAny<string>())).ReturnsAsync(new List<StockMetadata> { testStock });
-
-            var httpClientFactory = new Mock<IHttpClientFactory>();
+            httpCallsMock.Setup(m => m.Get<List<StockMetadata>>(It.IsAny<HttpClient>(), It.IsAny<string>()))
+                         .ReturnsAsync(new List<StockMetadata> { testStock });
 
             // Act
-            var stockAnalyzer = new StockAnalyzer(httpClientFactory.Object, httpCallsMock.Object, null);
+            var stockAnalyzer = new StockAnalyzer(httpClientFactoryMock.Object, 
+                                                  httpCallsMock.Object, 
+                                                  null, 
+                                                  configurationMock.Object);
             var stocks = await stockAnalyzer.GetStocksWithUsers();
 
             // Assert
@@ -48,13 +63,14 @@ namespace StockAnalyzerService.Test {
             // Arrange
             List<StockMetadata> expectedValue = new List<StockMetadata>();
             var httpCallsMock = new Mock<IHttpCalls>(MockBehavior.Strict);
-            httpCallsMock.Setup(m => m.Get<List<StockMetadata>>(It.IsAny<HttpClient>(), It.IsAny<string>())).Throws(new Exception());
-
-            var httpClientFactory = new Mock<IHttpClientFactory>();
-            var loggerMock = new Mock<ILogger<StockAnalyzer>>();
+            httpCallsMock.Setup(m => m.Get<List<StockMetadata>>(It.IsAny<HttpClient>(), It.IsAny<string>()))
+                         .Throws(new Exception());
 
             // Act
-            var stockAnalyzer = new StockAnalyzer(httpClientFactory.Object, httpCallsMock.Object, loggerMock.Object);
+            var stockAnalyzer = new StockAnalyzer(httpClientFactoryMock.Object, 
+                                                  httpCallsMock.Object, 
+                                                  loggerMock.Object, 
+                                                  configurationMock.Object);
             var stocks = await stockAnalyzer.GetStocksWithUsers();
 
             // Assert

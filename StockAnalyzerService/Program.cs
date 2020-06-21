@@ -44,12 +44,20 @@ namespace StockAnalyzerService {
             return host.ConfigureServices((hostContext, services) => {
                 services.AddHostedService<Worker>();
                 services.AddLogging(l => l.AddSerilog());
-                services.AddHttpClient("stockAnalyzer", c => {
-                    c.BaseAddress = new Uri("http://localhost:3000/api/");
-                    c.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-                });
                 services.AddSingleton<IStockAnalyzer, StockAnalyzer>();
                 services.AddSingleton<IHttpCalls, HttpCalls>();
+                AddCustomHttpClients(services);
+            });
+        }
+
+        public static void AddCustomHttpClients(IServiceCollection services)
+        {
+            services.AddHttpClient("stockAnalyzer", c => {
+                c.BaseAddress = new Uri("http://localhost:3000/api/");
+                c.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+            });
+            services.AddHttpClient("vantageApi", api => {
+                api.BaseAddress = new Uri("https://www.alphavantage.co/query");
             });
         }
     }
