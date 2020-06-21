@@ -1,7 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
+using System.IO;
+using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
+using CsvHelper;
 using Microsoft.Extensions.Logging;
 
 namespace StockAnalyzerService.Service {
@@ -24,7 +28,16 @@ namespace StockAnalyzerService.Service {
                 _logger.LogError(ex, $"Error when making a http GET call to {url}");
                 throw;
             }
+        }
 
+        public async Task<IEnumerable<T>> GetFromCsv<T>(HttpClient httpClient, string urlParameters) {
+            string url = httpClient.BaseAddress + urlParameters;
+
+            using (var reader = new StreamReader(await httpClient.GetStreamAsync(url)))
+            {
+                var csvr = new CsvReader(reader, CultureInfo.InvariantCulture);
+                return csvr.GetRecords<T>().ToList();
+            }
         }
     }
 }
