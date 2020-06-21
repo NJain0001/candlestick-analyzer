@@ -6,6 +6,7 @@ using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
 using CsvHelper;
+using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Logging;
 
 namespace StockAnalyzerService.Service {
@@ -30,10 +31,14 @@ namespace StockAnalyzerService.Service {
             }
         }
 
-        public async Task<IEnumerable<T>> GetFromCsv<T>(HttpClient httpClient, string urlParameters) {
-            string url = httpClient.BaseAddress + urlParameters;
+        public async Task<IEnumerable<T>> GetFromCsv<T>(HttpClient httpClient, Dictionary<string, string> urlParameters) {
+
+            var url = string.Empty;
+
             try
             {
+                url = QueryHelpers.AddQueryString(httpClient.BaseAddress.ToString(), urlParameters);
+                
                 using (var reader = new StreamReader(await httpClient.GetStreamAsync(url)))
                 {
                     var csvr = new CsvReader(reader, CultureInfo.InvariantCulture);

@@ -5,7 +5,6 @@ using System.Collections.Generic;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Configuration;
-using Microsoft.AspNetCore.WebUtilities;
 
 namespace StockAnalyzerService.Service {
 	public class StockAnalyzer : IStockAnalyzer {
@@ -47,9 +46,7 @@ namespace StockAnalyzerService.Service {
 					{ "apikey", _apiKey},
 					{ "datatype", "csv"}
 				};
-				vantageApi.BaseAddress = new System.Uri(QueryHelpers.AddQueryString(vantageApi.BaseAddress.ToString(), httpParams));
-
-				var candlestickData = await httpCalls.GetFromCsv<Candlestick>(vantageApi, null);
+				var candlestickData = await httpCalls.GetFromCsv<Candlestick>(vantageApi, httpParams);
 				return candlestickData;
 			}
 			catch (Exception ex)
