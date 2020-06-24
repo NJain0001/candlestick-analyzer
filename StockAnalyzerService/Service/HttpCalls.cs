@@ -51,5 +51,22 @@ namespace StockAnalyzerService.Service {
                 throw;
             }
         }
+
+        public async Task Post<T>(HttpClient client, string endPoint, T objectToPost)
+        {
+            try
+            {
+                var response = await client.PostAsJsonAsync<T>(endPoint, objectToPost);
+
+                if (response.IsSuccessStatusCode == false)
+                {
+                    _logger.LogError("Post failed. {StatusCode}, {Content}, {BaseAddress}, {EndPoint}, {DataPosted}", response.StatusCode, response.Content, client.BaseAddress, endPoint, objectToPost);
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Post failed. {BaseAddress}, {EndPoint}, {DataPosted}", client.BaseAddress, endPoint, objectToPost);
+            }
+        }
     }
 }

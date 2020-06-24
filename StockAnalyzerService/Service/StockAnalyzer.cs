@@ -55,5 +55,11 @@ namespace StockAnalyzerService.Service {
 				return new List<Candlestick>();
 			}
 		}
+
+		public void PostCandlestickData(StockCandlestickViewModel candlestickData)
+		{
+			HttpClient client = clientFactory.CreateClient("stockAnalyzer");
+			httpCalls.Post<StockCandlestickViewModel>(client, "stocks/analysis-data", candlestickData);
+		}
 	}
 }
