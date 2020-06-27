@@ -8,5 +8,6 @@ namespace StockAnalyzerService.Service {
     public interface IStockAnalyzer {
         Task<List<StockMetadata>> GetStocksWithUsers();
         Task<IEnumerable<Candlestick>> GetStockCandlestickData(StockMetadata stock);
+        void PostCandlestickData(StockCandlestickViewModel candlestickData);
     }
 }
