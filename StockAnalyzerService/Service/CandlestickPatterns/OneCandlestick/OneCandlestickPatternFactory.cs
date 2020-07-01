@@ -3,7 +3,7 @@ using StockAnalyzerService.Model;
 
 namespace StockAnalyzerService.Service {
     public class OneCandlestickPatternFactory {
-        public Dictionary<IOneCandlestickPattern, StockAction> PatternDict { get; set; }
+        public Dictionary<IOneCandlestickPattern, StockAction> PatternDict { get; private set; }
 
         public OneCandlestickPatternFactory() {
             PatternDict = new Dictionary<IOneCandlestickPattern, StockAction>();
