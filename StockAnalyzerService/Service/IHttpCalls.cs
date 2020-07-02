@@ -6,5 +6,6 @@ namespace StockAnalyzerService.Service {
     public interface IHttpCalls {
         Task<T> Get<T>(HttpClient httpClient, string urlParameters);
         Task<IEnumerable<T>> GetFromCsv<T>(HttpClient httpClient, Dictionary<string, string> urlParameters);
+        Task Post<T>(HttpClient client, string endPoint, T objectToPost);
     }
 }
