@@ -12,22 +12,37 @@ namespace StockAnalyzerService.Test.Service {
         }
 
         [Fact]
-        public void Should_ReturnTrue_WhenAllConditionsAreMet() {
+        public void Should_ReturnCandlestickAnalysisObject_WhenAllConditionsAreMet() {
+            //Arrange
+            var timestamp = DateTime.Now;
             var candlestick = new Candlestick() {
                 HighPrice = 10.00,
                 LowPrice = 1.25,
                 OpenPrice = 1.50,
                 ClosePrice = 3.00,
-                Timestamp = DateTime.Now
+                Timestamp = timestamp
             };
 
-            var isPatternFound = _invertedHammer.Apply(candlestick);
+            var expectedValue = new CandlestickAnalysis() {
+                Ticker = "MSFT",
+                Timestamp = timestamp,
+                Pattern = "Inverted Hammer",
+                Action = StockAction.Buy
+            };
 
-            Assert.True(isPatternFound);
+            //Act
+            var analysis = _invertedHammer.Apply(candlestick, "MSFT");
+
+            //Assert
+            Assert.Equal(expectedValue.Ticker, analysis.Ticker);
+            Assert.Equal(expectedValue.Timestamp, analysis.Timestamp);
+            Assert.Equal(expectedValue.Pattern, analysis.Pattern);
+            Assert.Equal(expectedValue.Action, analysis.Action);
         }
 
         [Fact]
-        public void Should_ReturnFalse_WhenBodyIsTooLarge() {
+        public void Should_ReturnNull_WhenBodyIsTooLarge() {
+            //Arrange
             var candlestick = new Candlestick() {
                 HighPrice = 10.00,
                 LowPrice = 1.25,
@@ -36,13 +51,16 @@ namespace StockAnalyzerService.Test.Service {
                 Timestamp = DateTime.Now
             };
 
-            var isPatternFound = _invertedHammer.Apply(candlestick);
+            //Act
+            var analysis = _invertedHammer.Apply(candlestick, "MSFT");
 
-            Assert.False(isPatternFound);
+            //Assert
+            Assert.Null(analysis);
         }
 
         [Fact]
-        public void Should_ReturnFalse_WhenLowerWickIsTooLarge() {
+        public void Should_ReturnNull_WhenLowerWickIsTooLarge() {
+            //Arrange
             var candlestick = new Candlestick() {
                 HighPrice = 10.00,
                 LowPrice = 0.25,
@@ -51,9 +69,11 @@ namespace StockAnalyzerService.Test.Service {
                 Timestamp = DateTime.Now
             };
 
-            var isPatternFound = _invertedHammer.Apply(candlestick);
+            //Act
+            var analysis = _invertedHammer.Apply(candlestick, "MSFT");
 
-            Assert.False(isPatternFound);
+            //Assert
+            Assert.Null(analysis);
         }
     }
 }
