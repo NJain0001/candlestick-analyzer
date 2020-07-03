@@ -4,7 +4,7 @@ namespace StockAnalyzerService.Service {
 
     public class BullishEngulfing : ITwoCandlestickPattern
     {
-        public bool Apply(Candlestick firstCandle, Candlestick secondCandle)
+        public CandlestickAnalysis Apply(Candlestick firstCandle, Candlestick secondCandle, string ticker)
         {
             var isFirstCandleRed = firstCandle.OpenPrice > firstCandle.ClosePrice;
             // confirm second candle is green
@@ -15,9 +15,14 @@ namespace StockAnalyzerService.Service {
             
             if (isFirstCandleRed && isSecondCandleGreen && isFirstCandleEngulfed)
             {
-                return true;
+                return new CandlestickAnalysis() {
+                    Ticker = ticker,
+                    Timestamp = firstCandle.Timestamp,
+                    Pattern = "Bullish Engulfing",
+                    Action = StockAction.Buy
+                };
             } 
-            return false;
+            return null;
         }
     }
 }
