@@ -3,6 +3,6 @@ using StockAnalyzerService.Model;
 
 namespace StockAnalyzerService.Service {
     public interface IOneCandlestickPattern {
-        Boolean Apply(Candlestick candlestick);
+        CandlestickAnalysis Apply(Candlestick candlestick, string ticker);
     }
 }

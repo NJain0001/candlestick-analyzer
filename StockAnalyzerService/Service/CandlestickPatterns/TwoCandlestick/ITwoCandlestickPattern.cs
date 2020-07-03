@@ -5,6 +5,6 @@ namespace StockAnalyzerService.Service {
 
     public interface ITwoCandlestickPattern
     {
-        Boolean Apply(Candlestick firstCandle, Candlestick secondCandle);
+        CandlestickAnalysis Apply(Candlestick firstCandle, Candlestick secondCandle, string ticker);
     }
 }

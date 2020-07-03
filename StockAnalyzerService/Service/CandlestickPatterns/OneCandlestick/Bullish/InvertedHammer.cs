@@ -3,7 +3,7 @@ using StockAnalyzerService.Model;
 
 namespace StockAnalyzerService.Service {
     public class InvertedHammer : IOneCandlestickPattern {
-        public Boolean Apply(Candlestick candlestick) {
+        public CandlestickAnalysis Apply(Candlestick candlestick, string ticker) {
             var HighLowPriceDifference = candlestick.HighPrice - candlestick.LowPrice;
 			var HighClosePriceDifference = candlestick.HighPrice - candlestick.ClosePrice;
 			var CloseOpenPriceDifference = candlestick.ClosePrice - candlestick.OpenPrice;
@@ -14,10 +14,15 @@ namespace StockAnalyzerService.Service {
 			var LowerWickRatio = OpenLowPriceDifference / HighLowPriceDifference;
 
 			if ((UpperWickRatio / BodyRatio) >= 2 && LowerWickRatio <= .05) {
-				return true;
+				return new CandlestickAnalysis() {
+					Ticker = ticker,
+					Timestamp = candlestick.Timestamp,
+					Pattern = "Inverted Hammer",
+					Action = StockAction.Buy
+				};
 			}
 
-			return false;
+			return null;
         }
     }
 }
