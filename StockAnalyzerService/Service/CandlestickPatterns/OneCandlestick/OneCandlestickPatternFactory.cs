@@ -3,14 +3,14 @@ using StockAnalyzerService.Model;
 
 namespace StockAnalyzerService.Service {
     public class OneCandlestickPatternFactory {
-        public Dictionary<IOneCandlestickPattern, StockAction> PatternDict { get; private set; }
+        public List<IOneCandlestickPattern> PatternDict { get; private set; }
 
         public OneCandlestickPatternFactory() {
-            PatternDict = new Dictionary<IOneCandlestickPattern, StockAction>();
-            PatternDict.Add(new ShootingStar(), StockAction.Buy);
-            PatternDict.Add(new InvertedHammer(), StockAction.Buy);
-            PatternDict.Add(new Hammer(), StockAction.Sell);
-            PatternDict.Add(new HangingMan(), StockAction.Sell);
+            PatternDict = new List<IOneCandlestickPattern>();
+            PatternDict.Add(new ShootingStar());
+            PatternDict.Add(new InvertedHammer());
+            PatternDict.Add(new Hammer());
+            PatternDict.Add(new HangingMan());
         }
     }
 }
