@@ -12,7 +12,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Xunit;
 
-namespace StockAnalyzerService.Test {
+namespace StockAnalyzerService.Test.Service {
     public class HttpCallsTests {
         [Fact]
         public async void Get_Should_ReturnOneStockMetadataObject() {
