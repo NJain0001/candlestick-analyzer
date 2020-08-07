@@ -40,9 +40,8 @@ namespace StockAnalyzerService.Service {
 			{
 				HttpClient vantageApi = clientFactory.CreateClient("vantageApi");
 				var httpParams = new Dictionary<string, string>() {
-					{ "function", "TIME_SERIES_INTRADAY" },
+					{ "function", "DAILY" },
 					{ "symbol", stock.Ticker},
-					{ "interval", "60min" },
 					{ "apikey", _apiKey},
 					{ "datatype", "csv"}
 				};
