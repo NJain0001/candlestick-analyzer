@@ -1,9 +1,11 @@
+using Microsoft.VisualStudio.TestPlatform;
 using Moq;
 using StockAnalyzerService.Model;
 using StockAnalyzerService.Service;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using Xunit;
 
 namespace StockAnalyzerService.Test.Service
@@ -25,10 +27,10 @@ namespace StockAnalyzerService.Test.Service
             }
 
             _movingAverageMock.Setup(m => m.CalculateSMA(It.IsAny<List<Candlestick>>())).Returns(5.0);
-            ITrendLine _trendLine = new TrendLine(_movingAverageMock.Object);
+            ITrendLine trendLine = new TrendLine(_movingAverageMock.Object);
 
             // Act
-            List<double> actual = _trendLine.CalculateTrendLine(upTrendCandlesticks);
+            List<double> actual = trendLine.CalculateTrendLine(upTrendCandlesticks);
 
             // Assert
             Assert.Equal(expected, actual);
@@ -39,9 +41,15 @@ namespace StockAnalyzerService.Test.Service
             // Arrange
             string expected = "Up";
             List<double> listToAnalyze = new List<double>(); //TODO: populate with upwards trend line
+            Type trendLineType = typeof(TrendLine);
+            ITrendLine trendLine = new TrendLine(_movingAverageMock.Object);
+            var activator = Activator.CreateInstance(typeof(TrendLine), _movingAverageMock.Object);
+            MethodInfo method = trendLineType.GetMethods(BindingFlags.NonPublic | BindingFlags.Instance)
+            .Where(x => x.Name == "DirectionOfTrendLine" && x.IsPrivate)
+            .First();
             
             // Act
-            string actual = _trendLine.DirectionOfTrendLine(listToAnalyze);
+            string actual = (string)method.Invoke(activator, new Object[] { listToAnalyze });
 
             // Assert
             Assert.Equal(expected, actual);
@@ -52,9 +60,15 @@ namespace StockAnalyzerService.Test.Service
             // Arrange
             string expected = "Down";
             List<double> listToAnalyze = new List<double>(); //TODO: populate with downwards trend line
+            Type trendLineType = typeof(TrendLine);
+            ITrendLine trendLine = new TrendLine(_movingAverageMock.Object);
+            var activator = Activator.CreateInstance(typeof(TrendLine), _movingAverageMock.Object);
+            MethodInfo method = trendLineType.GetMethods(BindingFlags.NonPublic | BindingFlags.Instance)
+            .Where(x => x.Name == "DirectionOfTrendLine" && x.IsPrivate)
+            .First();
             
             // Act
-            string actual = _trendLine.DirectionOfTrendLine(listToAnalyze);
+            string actual = (string)method.Invoke(activator, new Object[] { listToAnalyze });
 
             // Assert
             Assert.Equal(expected, actual);
@@ -65,9 +79,15 @@ namespace StockAnalyzerService.Test.Service
             // Arrange
             string expected = "Flat";
             List<double> listToAnalyze = new List<double>(); //TODO: populate with flat trend line
+            Type trendLineType = typeof(TrendLine);
+            ITrendLine trendLine = new TrendLine(_movingAverageMock.Object);
+            var activator = Activator.CreateInstance(typeof(TrendLine), _movingAverageMock.Object);
+            MethodInfo method = trendLineType.GetMethods(BindingFlags.NonPublic | BindingFlags.Instance)
+            .Where(x => x.Name == "DirectionOfTrendLine" && x.IsPrivate)
+            .First();
             
             // Act
-            string actual = _trendLine.DirectionOfTrendLine(listToAnalyze);
+            string actual = (string)method.Invoke(activator, new Object[] { listToAnalyze });
 
             // Assert
             Assert.Equal(expected, actual);
@@ -79,9 +99,10 @@ namespace StockAnalyzerService.Test.Service
             string expectedExceptionMessage = "Number of candlesticks must match length of trend line.";
             List<Candlestick> candlesticks = upTrendCandlesticks.Take(100).ToList();
             List<double> trendLineToAnalyze = new List<double>(); //TODO: Populate with actual data
+            ITrendLine trendLine = new TrendLine(_movingAverageMock.Object);
 
             // Act
-            Action action = () => _trendLine.EvaluateTrendLine(candlesticks, trendLineToAnalyze);
+            Action action = () => trendLine.EvaluateTrendLine(candlesticks, trendLineToAnalyze);
 
             // Assert
             var exception = Assert.Throws<Exception>(action);
@@ -93,9 +114,10 @@ namespace StockAnalyzerService.Test.Service
             // Arrange
             string expected = "Up";
             List<double> trendLineToAnalyze = new List<double>(); //TODO: Populate with actual data
+            ITrendLine trendLine = new TrendLine(_movingAverageMock.Object);
 
             // Act
-            string actual = _trendLine.EvaluateTrendLine(upTrendCandlesticks, trendLineToAnalyze);
+            string actual = trendLine.EvaluateTrendLine(upTrendCandlesticks, trendLineToAnalyze);
 
             // Assert
             Assert.Equal(expected, actual);
@@ -108,9 +130,10 @@ namespace StockAnalyzerService.Test.Service
             List<Candlestick> candlesticks = upTrendCandlesticks;
             //TODO: Manipulate candlesticks to make it not have a trend
             List<double> trendLineToAnalyze = new List<double>(); //TODO: Populate with actual data
+            ITrendLine trendLine = new TrendLine(_movingAverageMock.Object);
 
             // Act
-            string actual = _trendLine.EvaluateTrendLine(candlesticks, trendLineToAnalyze);
+            string actual = trendLine.EvaluateTrendLine(candlesticks, trendLineToAnalyze);
 
             // Assert
             Assert.Equal(expected, actual);
@@ -121,9 +144,10 @@ namespace StockAnalyzerService.Test.Service
             // Arrange
             string expected = "Down";
             List<double> trendLineToAnalyze = new List<double>(); //TODO: Populate with actual data
+            ITrendLine trendLine = new TrendLine(_movingAverageMock.Object);
 
             // Act
-            string actual = _trendLine.EvaluateTrendLine(downTrendCandlesticks, trendLineToAnalyze);
+            string actual = trendLine.EvaluateTrendLine(downTrendCandlesticks, trendLineToAnalyze);
 
             // Assert
             Assert.Equal(expected, actual);
@@ -136,9 +160,10 @@ namespace StockAnalyzerService.Test.Service
             List<Candlestick> candlesticks = upTrendCandlesticks;
             //TODO: Manipulate candlesticks to make it not have a trend
             List<double> trendLineToAnalyze = new List<double>(); //TODO: Populate with actual data
+            ITrendLine trendLine = new TrendLine(_movingAverageMock.Object);
 
             // Act
-            string actual = _trendLine.EvaluateTrendLine(candlesticks, trendLineToAnalyze);
+            string actual = trendLine.EvaluateTrendLine(candlesticks, trendLineToAnalyze);
 
             // Assert
             Assert.Equal(expected, actual);
@@ -151,9 +176,10 @@ namespace StockAnalyzerService.Test.Service
             List<Candlestick> candlesticks = upTrendCandlesticks;
             //TODO: Manipulate candlesticks to make it not have a trend
             List<double> trendLineToAnalyze = new List<double>(); //TODO: Populate with actual data
+            ITrendLine trendLine = new TrendLine(_movingAverageMock.Object);
 
             // Act
-            string actual = _trendLine.EvaluateTrendLine(candlesticks, trendLineToAnalyze);
+            string actual = trendLine.EvaluateTrendLine(candlesticks, trendLineToAnalyze);
 
             // Assert
             Assert.Equal(expected, actual);
