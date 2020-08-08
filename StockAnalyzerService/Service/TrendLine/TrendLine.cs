@@ -4,29 +4,24 @@ using System.Linq;
 using StockAnalyzerService.Model;
 
 namespace StockAnalyzerService.Service {
-    public class TrendLine {
-        public TrendLine() {
-
+    public class TrendLine: ITrendLine {
+        private IMovingAverage _movingAverage;
+        public TrendLine(IMovingAverage movingAverage) {
+            _movingAverage = movingAverage;
         }
-
-        public double CalculateSMA(List<Candlestick> candlesticks) {
-            double sum = candlesticks.Sum(candlestick => candlestick.ClosePrice);
-
-            return sum / candlesticks.Count;
-        }
-
+        
         public List<double> CalculateTrendLine(List<Candlestick> candlesticks) {
             List<Candlestick> trendLineCandlesticks = candlesticks.Skip(199).ToList();
             List<double> trendLine = new List<double>();
             foreach (var candlestick in trendLineCandlesticks) {
-                trendLine.Add(CalculateSMA(candlesticks.Take(200).ToList()));
+                trendLine.Add(_movingAverage.CalculateSMA(candlesticks.Take(200).ToList()));
                 candlesticks.RemoveAt(0);
             }
 
             return trendLine;
         }
 
-        public string DirectionOfTrendLine(List<double> trendLine) {
+        private string DirectionOfTrendLine(List<double> trendLine) {
             var DateMean = trendLine.Average();
             var ClosePriceMean = (trendLine.Count - 1) / 2;
 
