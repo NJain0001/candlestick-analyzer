@@ -22,7 +22,7 @@ namespace StockAnalyzerService.Test.Service
         public void CalculateTrendLine_Should_ReturnListOfSMAs() {
             // Arrange
             List<double> expected = new List<double>();
-            for (int i = 0; i < 400; i++) {
+            for (int i = 0; i < 201; i++) {
                 expected.Add(5.0);
             }
 
@@ -112,7 +112,7 @@ namespace StockAnalyzerService.Test.Service
             var trendLine = new TrendLine(_movingAverageMock.Object);
 
             // Act
-            string actual = trendLine.EvaluateTrendLine(_fixture.upTrendCandlesticks, _fixture.upwardTrendLine);
+            string actual = trendLine.EvaluateTrendLine(_fixture.upTrendCandlesticks.Skip(199).ToList(), _fixture.upwardTrendLine);
 
             // Assert
             Assert.Equal(expected, actual);
@@ -125,7 +125,7 @@ namespace StockAnalyzerService.Test.Service
             var trendLine = new TrendLine(_movingAverageMock.Object);
 
             // Act
-            string actual = trendLine.EvaluateTrendLine(_fixture.upTrendCandlesticks, _fixture.flatTrendLine);
+            string actual = trendLine.EvaluateTrendLine(_fixture.upTrendCandlesticks.Skip(199).ToList(), _fixture.flatTrendLine);
 
             // Assert
             Assert.Equal(expected, actual);
@@ -138,7 +138,7 @@ namespace StockAnalyzerService.Test.Service
             var trendLine = new TrendLine(_movingAverageMock.Object);
 
             // Act
-            string actual = trendLine.EvaluateTrendLine(_fixture.downTrendCandlesticks, _fixture.downwardTrendLine);
+            string actual = trendLine.EvaluateTrendLine(_fixture.downTrendCandlesticks.Skip(199).ToList(), _fixture.downwardTrendLine);
 
             // Assert
             Assert.Equal(expected, actual);
@@ -151,7 +151,7 @@ namespace StockAnalyzerService.Test.Service
             var trendLine = new TrendLine(_movingAverageMock.Object);
 
             // Act
-            string actual = trendLine.EvaluateTrendLine(_fixture.downTrendCandlesticks, _fixture.flatTrendLine);
+            string actual = trendLine.EvaluateTrendLine(_fixture.downTrendCandlesticks.Skip(199).ToList(), _fixture.flatTrendLine);
 
             // Assert
             Assert.Equal(expected, actual);
@@ -164,7 +164,7 @@ namespace StockAnalyzerService.Test.Service
             var trendLine = new TrendLine(_movingAverageMock.Object);
 
             // Act
-            string actual = trendLine.EvaluateTrendLine(_fixture.flatTrendCandlesticks, _fixture.flatTrendLine);
+            string actual = trendLine.EvaluateTrendLine(_fixture.flatTrendCandlesticks.Skip(199).ToList(), _fixture.flatTrendLine);
 
             // Assert
             Assert.Equal(expected, actual);

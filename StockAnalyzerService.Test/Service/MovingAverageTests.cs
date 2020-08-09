@@ -14,7 +14,7 @@ namespace StockAnalyzerService.Test.Service {
         [Fact]
         public void CalculateSMA_Should_ReturnAverageOfListOfSize50() {
             // Arrange
-            double expectedValue = 0.0; //TODO: Put in actual average
+            double expectedValue = 12.25; //TODO: Put in actual average
             List<Candlestick> listToAnalyze = _fixture.upTrendCandlesticks.Take(50).ToList();
             MovingAverage movingAverage = new MovingAverage();
 
@@ -28,7 +28,7 @@ namespace StockAnalyzerService.Test.Service {
         [Fact]
         public void CalculateSMA_Should_ReturnAverageOfListOfSize200() {
             // Arrange
-            double expectedValue = 0.0; //TODO: Put in actual average
+            double expectedValue = 49.75; //TODO: Put in actual average
             List<Candlestick> listToAnalyze = _fixture.upTrendCandlesticks.Take(200).ToList();
             MovingAverage movingAverage = new MovingAverage();
 
