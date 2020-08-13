@@ -10,7 +10,7 @@ using Xunit;
 
 namespace StockAnalyzerService.Test.Service
 {
-    public class TrendLineTests {
+    public class TrendLineTests: IClassFixture<CandlestickFixture> {
         private CandlestickFixture _fixture;
         private Mock<IMovingAverage> _movingAverageMock;
         public TrendLineTests() {

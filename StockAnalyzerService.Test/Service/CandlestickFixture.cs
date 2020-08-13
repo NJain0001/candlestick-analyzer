@@ -10,6 +10,7 @@ namespace StockAnalyzerService.Test.Service {
         public List<double> upwardTrendLine;
         public List<double> downwardTrendLine;
         public List<double> flatTrendLine;
+        private Boolean _disposed;
         public CandlestickFixture() {
             upTrendCandlesticks = populateUpTrendCandlesticks();
             downTrendCandlesticks = populateDownTrendCandlesticks();
@@ -19,8 +20,37 @@ namespace StockAnalyzerService.Test.Service {
             flatTrendLine = populateFlatwardTrendLine();
         }
 
-        public void Dispose() {
+        public void Dispose() 
+        {
+            Dispose(true);
 
+            // Use SupressFinalize in case a subclass
+            // of this type implements a finalizer.
+            GC.SuppressFinalize(this);      
+        }
+
+        protected virtual void Dispose(bool disposing)
+        {
+            // If you need thread safety, use a lock around these 
+            // operations, as well as in your methods that use the resource.
+            if (!_disposed)
+            {
+                if (disposing) {
+                    upTrendCandlesticks.Clear();
+                    downTrendCandlesticks.Clear();
+                    flatTrendCandlesticks.Clear();
+                    upwardTrendLine.Clear();
+                    downwardTrendLine.Clear();
+                    flatTrendLine.Clear();
+                }
+
+                // Indicate that the instance has been disposed.
+                _disposed = true;   
+            }
+        }
+
+        ~CandlestickFixture() {
+            Dispose(false);
         }
 
         public List<Candlestick> populateUpTrendCandlesticks() {
