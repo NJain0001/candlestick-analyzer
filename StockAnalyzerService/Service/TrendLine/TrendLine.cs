@@ -14,7 +14,8 @@ namespace StockAnalyzerService.Service {
             List<Candlestick> trendLineCandlesticks = candlesticks.Skip(199).ToList();
             List<double> trendLine = new List<double>();
             foreach (var candlestick in trendLineCandlesticks) {
-                trendLine.Add(_movingAverage.CalculateSMA(candlesticks.Take(200).ToList()));
+                var sma = _movingAverage.CalculateSMA(candlesticks.Take(200).ToList());
+                trendLine.Add(sma);
                 candlesticks.RemoveAt(0);
             }
 
@@ -22,17 +23,17 @@ namespace StockAnalyzerService.Service {
         }
 
         private string DirectionOfTrendLine(List<double> trendLine) {
-            var DateMean = trendLine.Average();
-            var ClosePriceMean = (trendLine.Count - 1) / 2;
+            var dateMean = trendLine.Average();
+            var closePriceMean = (trendLine.Count - 1) / 2;
 
             double xyDeltaSum = 0.0;
-            double xSqauredDeltaSum = 0.0;
+            double xDeltaSquaredSum = 0.0;
             for (int i = 0; i < trendLine.Count; i++) {
-                xyDeltaSum += (trendLine[i] - DateMean) * (i - ClosePriceMean);
-                xSqauredDeltaSum += Math.Pow(trendLine[i] - DateMean, 2);
+                xyDeltaSum += (trendLine[i] - dateMean) * (i - closePriceMean);
+                xDeltaSquaredSum += Math.Pow(trendLine[i] - dateMean, 2);
             }
 
-            double slope = xyDeltaSum / xSqauredDeltaSum;
+            double slope = xyDeltaSum / xDeltaSquaredSum;
 
             if (slope >= .5) {
                 return "Up";
