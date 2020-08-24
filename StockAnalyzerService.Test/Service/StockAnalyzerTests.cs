@@ -13,7 +13,7 @@ using StockAnalyzerService.Model;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Configuration;
 
-namespace StockAnalyzerService.Test {
+namespace StockAnalyzerService.Test.Service {
     public class StockAnalyzerTests {
 
         private Mock<IHttpCalls> httpCallsMock;

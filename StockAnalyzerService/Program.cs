@@ -46,6 +46,8 @@ namespace StockAnalyzerService {
                 services.AddLogging(l => l.AddSerilog());
                 services.AddSingleton<IStockAnalyzer, StockAnalyzer>();
                 services.AddSingleton<IHttpCalls, HttpCalls>();
+                services.AddSingleton<IMovingAverage, MovingAverage>();
+                services.AddSingleton<ITrendLine, TrendLine>();
                 AddCustomHttpClients(services);
             });
         }
