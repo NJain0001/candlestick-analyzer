@@ -4,8 +4,8 @@ using StockAnalyzerService.Model;
 
 namespace StockAnalyzerService.Service {
     public class AreaOfValue: IAreaOfValue {
-        private MovingAverage _movingAverage;
-        public AreaOfValue(MovingAverage movingAverage) {
+        private IMovingAverage _movingAverage;
+        public AreaOfValue(IMovingAverage movingAverage) {
             _movingAverage = movingAverage;
         }
         public bool IsCandlestickInAreaOfValue(List<Candlestick> candlesticks) {
